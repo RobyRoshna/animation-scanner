@@ -1,3 +1,6 @@
+ /* =====================================================
+       !! TEST PAGE: Intentionally failing
+    ===================================================== */
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +9,6 @@
   <title>Animation Scanner — Test Page</title>
   <style>
 
-    /* =====================================================
-       BASE STYLES
-    ===================================================== */
     body {
       font-family: monospace;
       background: #0f172a;
@@ -42,11 +42,11 @@
       margin-bottom: 12px;
     }
 
-    .fail  { color: #f87171; }  /* red  = should be flagged   */
-    .pass  { color: #4ade80; }  /* green = should be ignored  */
+    .fail  { color: #f87171; }  
+    .pass  { color: #4ade80; }  
 
     /* =====================================================
-       ❌ VIOLATIONS — these SHOULD be flagged by the scanner
+       This SHOULD be flagged by the scanner
        They have animations with NO prefers-reduced-motion guard
     ===================================================== */
 
@@ -115,7 +115,7 @@
     }
 
     /* =====================================================
-       ✅ SAFE — these should NOT be flagged
+       These should NOT be flagged
        They're wrapped in prefers-reduced-motion guards
     ===================================================== */
 
@@ -131,7 +131,7 @@
     /* Only animates if user has NOT requested reduced motion */
     @media (prefers-reduced-motion: no-preference) {
       .safe-spinner {
-        animation: spin 1s linear infinite; /* ← SAFE ✅ */
+        animation: spin 1s linear infinite; /* ← SAFE */
       }
     }
 
@@ -148,7 +148,7 @@
 
     @media (prefers-reduced-motion: no-preference) {
       .safe-btn {
-        transition: transform 0.2s ease; /* ← SAFE ✅ */
+        transition: transform 0.2s ease; /* ← SAFE*/
       }
 
       .safe-btn:hover {
@@ -196,7 +196,7 @@
 
         <div>
           <div style="font-size:11px;color:#64748b;margin-bottom:8px">4. Sliding banner (animation:)</div>
-          <div class="slide-banner"><span>⚡ Breaking news — unprotected marquee animation ⚡</span></div>
+          <div class="slide-banner"><span>Breaking news — unprotected marquee animation</span></div>
         </div>
 
       </div>
@@ -204,7 +204,7 @@
 
     <!-- SAFE -->
     <div class="card">
-      <div class="label pass">✅ Should Be Ignored</div>
+      <div class="label pass">Should Be Ignored</div>
 
       <p style="font-size:12px;color:#94a3b8;margin-top:0">
         These are wrapped in <code>prefers-reduced-motion: no-preference</code>.
@@ -242,7 +242,7 @@
     <p style="font-size:12px;color:#94a3b8;margin-top:0">
       This img tag has a .gif URL — scanner should flag it regardless of whether it's animated.
     </p>
-    <!-- Using a placeholder URL — in real use this would be an actual gif -->
+    <!-- Using a placeholder URL-->
     <img
       src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
       alt="Loading spinner gif"
