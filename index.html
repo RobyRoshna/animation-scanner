@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Animation Scanner — Test Page</title>
+  <style>
+
+    /* =====================================================
+       BASE STYLES
+    ===================================================== */
+    body {
+      font-family: monospace;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 40px;
+      line-height: 1.7;
+    }
+
+    h1 { color: #f8fafc; margin-bottom: 4px; }
+    h2 { color: #94a3b8; font-size: 13px; font-weight: normal; margin-top: 0; }
+    h3 { color: #f472b6; font-size: 14px; margin-top: 32px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #334155;
+    }
+
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .fail  { color: #f87171; }  /* red  = should be flagged   */
+    .pass  { color: #4ade80; }  /* green = should be ignored  */
+
+    /* =====================================================
+       ❌ VIOLATIONS — these SHOULD be flagged by the scanner
+       They have animations with NO prefers-reduced-motion guard
+    ===================================================== */
+
+    /* 1. Spinning loader — classic unprotected animation */
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #334155;
+      border-top-color: #f472b6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite; /* ← VIOLATION */
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 2. Pulsing badge — attention-grabbing, no guard */
+    .pulse-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: #7c3aed;
+      border-radius: 20px;
+      font-size: 12px;
+      animation: pulse 1.5s ease-in-out infinite; /* ← VIOLATION */
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.08); opacity: 0.8; }
+    }
+
+    /* 3. Hover transition — very common, almost always unguarded */
+    .hover-btn {
+      padding: 10px 20px;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: monospace;
+      transition: transform 0.2s ease, background 0.2s ease; /* ← VIOLATION */
+    }
+
+    .hover-btn:hover {
+      transform: translateY(-2px);
+      background: #0284c7;
+    }
+
+    /* 4. Sliding banner */
+    .slide-banner {
+      overflow: hidden;
+      white-space: nowrap;
+      color: #fbbf24;
+      font-size: 13px;
+    }
+
+    .slide-banner span {
+      display: inline-block;
+      animation: slide 8s linear infinite; /* ← VIOLATION */
+    }
+
+    @keyframes slide {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* =====================================================
+       ✅ SAFE — these should NOT be flagged
+       They're wrapped in prefers-reduced-motion guards
+    ===================================================== */
+
+    .safe-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #334155;
+      border-top-color: #4ade80;
+      border-radius: 50%;
+      /* No animation by default */
+    }
+
+    /* Only animates if user has NOT requested reduced motion */
+    @media (prefers-reduced-motion: no-preference) {
+      .safe-spinner {
+        animation: spin 1s linear infinite; /* ← SAFE ✅ */
+      }
+    }
+
+    .safe-btn {
+      padding: 10px 20px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: monospace;
+      /* No transition by default */
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .safe-btn {
+        transition: transform 0.2s ease; /* ← SAFE ✅ */
+      }
+
+      .safe-btn:hover {
+        transform: translateY(-2px);
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Animation Scanner — Test Page</h1>
+  <h2>Use this page to verify your bookmarklet catches the right violations.</h2>
+
+  <div style="background:#1e293b;border-radius:8px;padding:12px 16px;margin:20px 0;font-size:12px;border-left:3px solid #f59e0b;">
+    Expected result: <b style="color:#f87171">4 violations</b> (2 animations, 2 transitions) and <b style="color:#4ade80">2 safe elements</b> ignored
+  </div>
+
+  <div class="grid">
+
+    <!-- VIOLATIONS -->
+    <div class="card">
+      <div class="label fail">❌ Should Be Flagged</div>
+
+      <p style="font-size:12px;color:#94a3b8;margin-top:0">
+        These animations have NO <code>prefers-reduced-motion</code> guard.
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">1. Unprotected spinner (animation:)</div>
+          <div class="spinner"></div>
+        </div>
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">2. Pulsing badge (animation:)</div>
+          <span class="pulse-badge">New Message</span>
+        </div>
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">3. Hover button (transition:) — hover me</div>
+          <button class="hover-btn">Hover Me</button>
+        </div>
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">4. Sliding banner (animation:)</div>
+          <div class="slide-banner"><span>⚡ Breaking news — unprotected marquee animation ⚡</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SAFE -->
+    <div class="card">
+      <div class="label pass">✅ Should Be Ignored</div>
+
+      <p style="font-size:12px;color:#94a3b8;margin-top:0">
+        These are wrapped in <code>prefers-reduced-motion: no-preference</code>.
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">1. Protected spinner</div>
+          <div class="safe-spinner"></div>
+        </div>
+
+        <div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px">2. Protected hover button — hover me</div>
+          <button class="safe-btn">Hover Me</button>
+        </div>
+
+        <div style="background:#0f172a;border-radius:6px;padding:12px;margin-top:8px;">
+          <div style="font-size:11px;color:#64748b;margin-bottom:6px">The CSS that makes these safe:</div>
+          <pre style="font-size:10px;color:#4ade80;margin:0;white-space:pre-wrap;">@media (prefers-reduced-motion: no-preference) {
+  .safe-spinner {
+    animation: spin 1s linear infinite;
+  }
+}</pre>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GIF test -->
+  <div class="card" style="margin-top:24px;">
+    <div class="label fail">❌ GIF Detection Test</div>
+    <p style="font-size:12px;color:#94a3b8;margin-top:0">
+      This img tag has a .gif URL — scanner should flag it regardless of whether it's animated.
+    </p>
+    <!-- Using a placeholder URL — in real use this would be an actual gif -->
+    <img
+      src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+      alt="Loading spinner gif"
+      style="width:60px;height:60px;border-radius:6px;"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+    />
+    <div style="display:none;font-size:11px;color:#64748b;">
+      (GIF didn't load — but the scanner would still flag the src URL)
+    </div>
+  </div>
+
+  <div style="margin-top:32px;font-size:11px;color:#475569;">
+    💡 Tip: Open your browser's DevTools → Rendering tab → "Emulate prefers-reduced-motion"
+    to test how the safe elements respond to user OS settings.
+  </div>
+
+</body>
+</html>
