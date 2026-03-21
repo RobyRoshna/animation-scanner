@@ -161,7 +161,7 @@
 <body>
 
   <h1>Animation Scanner — Test Page</h1>
-  <h2>Use this page to verify your bookmarklet catches the right violations.</h2>
+  <h2>Use this page to verify that animation-scanner bookmarklet catches the right violations.</h2>
 
   <div style="background:#1e293b;border-radius:8px;padding:12px 16px;margin:20px 0;font-size:12px;border-left:3px solid #f59e0b;">
     Expected result: <b style="color:#f87171">4 violations</b> (2 animations, 2 transitions) and <b style="color:#4ade80">2 safe elements</b> ignored
@@ -173,29 +173,29 @@
     <div class="card">
       <div class="label fail">❌ Should Be Flagged</div>
 
-      <p style="font-size:12px;color:#94a3b8;margin-top:0">
+      <p style="font-size:12px;color:#e2e8f0;margin-top:0">
         These animations have NO <code>prefers-reduced-motion</code> guard.
       </p>
 
       <div style="display:flex;flex-direction:column;gap:20px;">
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">1. Unprotected spinner (animation:)</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">1. Unprotected spinner (animation:)</div>
           <div class="spinner"></div>
         </div>
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">2. Pulsing badge (animation:)</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">2. Pulsing badge (animation:)</div>
           <span class="pulse-badge">New Message</span>
         </div>
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">3. Hover button (transition:) — hover me</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">3. Hover button (transition:) — hover me</div>
           <button class="hover-btn">Hover Me</button>
         </div>
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">4. Sliding banner (animation:)</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">4. Sliding banner (animation:)</div>
           <div class="slide-banner"><span>Breaking news — unprotected marquee animation</span></div>
         </div>
 
@@ -206,19 +206,19 @@
     <div class="card">
       <div class="label pass">Should Be Ignored</div>
 
-      <p style="font-size:12px;color:#94a3b8;margin-top:0">
+      <p style="font-size:12px;color:#e2e8f0;margin-top:0">
         These are wrapped in <code>prefers-reduced-motion: no-preference</code>.
       </p>
 
       <div style="display:flex;flex-direction:column;gap:20px;">
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">1. Protected spinner</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">1. Protected spinner</div>
           <div class="safe-spinner"></div>
         </div>
 
         <div>
-          <div style="font-size:11px;color:#64748b;margin-bottom:8px">2. Protected hover button — hover me</div>
+          <div style="font-size:11px;color:#e2e8f0;margin-bottom:8px">2. Protected hover button — hover me</div>
           <button class="safe-btn">Hover Me</button>
         </div>
 
@@ -239,7 +239,7 @@
   <!-- GIF test -->
   <div class="card" style="margin-top:24px;">
     <div class="label fail">❌ GIF Detection Test</div>
-    <p style="font-size:12px;color:#94a3b8;margin-top:0">
+    <p style="font-size:12px;color:#e2e8f0;margin-top:0">
       This img tag has a .gif URL — scanner should flag it regardless of whether it's animated.
     </p>
     <!-- Using a placeholder URL-->
@@ -249,13 +249,13 @@
       style="width:60px;height:60px;border-radius:6px;"
       onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
     />
-    <div style="display:none;font-size:11px;color:#64748b;">
+    <div style="display:none;font-size:11px;color:#e2e8f0;">
       (GIF didn't load — but the scanner would still flag the src URL)
     </div>
   </div>
 
-  <div style="margin-top:32px;font-size:11px;color:#475569;">
-    💡 Tip: Open your browser's DevTools → Rendering tab → "Emulate prefers-reduced-motion"
+  <div style="margin-top:32px;font-size:11px;color:#e2e8f0;">
+    TEST: Open your browser's DevTools → Rendering tab → "Emulate prefers-reduced-motion"
     to test how the safe elements respond to user OS settings.
   </div>
 
