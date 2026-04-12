@@ -77,7 +77,7 @@
   });
 
 
-  // GIFs are a separate beast — they're not CSS at all.
+  // GIFs are a separate issue as they're not CSS at all.
   // We just grab every img tag whose src contains ".gif".
   // We can't tell programmatically if a GIF is actually animated,
   // but flagging all of them is a reasonable call since animated
@@ -139,9 +139,9 @@
     <div style="padding:14px 16px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;align-items:center;">
       <div>
         <div style="font-weight:bold;font-size:14px;color:#f8fafc;">Motion Scanner</div>
-        <div style="font-size:11px;color:#94a3b8;">WCAG 2.3.3 — prefers-reduced-motion</div>
+        <div style="font-size:11px;color:#b3becd;">WCAG 2.3.3 — prefers-reduced-motion</div>
       </div>
-      <button id="a11y-close-btn" style="background:#334155;border:none;color:#94a3b8;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;">x</button>
+      <button id="a11y-close-btn" style="background:#334155;border:none;color:#b3becd;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;">x</button>
     </div>
 
     <div style="padding:12px 16px;border-bottom:1px solid #1e293b;">
@@ -161,7 +161,7 @@
 
     <div style="padding:12px 16px;">
       ${total === 0
-        ? `<div style="color:#94a3b8;font-size:12px;">
+        ? `<div style="color:#b3becd;font-size:12px;">
              No unprotected animations found. This page respects motion preferences.
            </div>`
         : violations.slice(0, 20).map(v => `
@@ -169,9 +169,9 @@
               v.type === 'animation' ? '#f472b6' :
               v.type === 'transition' ? '#60a5fa' : '#34d399'
             };">
-              <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">${v.type}</div>
+              <div style="font-size:11px;color:#b3becd;text-transform:uppercase;letter-spacing:.5px;">${v.type}</div>
               <div style="color:#fbbf24;font-size:11px;word-break:break-all;">${truncate(v.selector, 60)}</div>
-              <div style="color:#94a3b8;font-size:10px;word-break:break-all;">${truncate(v.value, 80)}</div>
+              <div style="color:#b3becd;font-size:10px;word-break:break-all;">${truncate(v.value, 80)}</div>
             </div>
           `).join('')
       }
