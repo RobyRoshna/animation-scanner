@@ -1,0 +1,24 @@
+{
+  "name": "animation-scanner",
+  "version": "1.0.0",
+  "description": "A browser bookmarklet that scans any webpage for CSS animations and transitions that don't respect the `prefers-reduced-motion` user preference.",
+  "main": "bookmarklet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "minify": "terser scanner.js --compress --mangle -o bookmarklet.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobyRoshna/animation-scanner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobyRoshna/animation-scanner/issues"
+  },
+  "homepage": "https://github.com/RobyRoshna/animation-scanner#readme",
+  "devDependencies": {
+    "terser": "^5.46.1"
+  }
+}
