@@ -1,3 +1,7 @@
+// Readable source: make all edits here.
+// To build: run "npm run minify" which outputs bookmarklet.min.js
+// Then prefix "javascript:" to the contents of bookmarklet.min.js that's your installable bookmarklet.
+// Requires terser: npm install
 (function () {
 
   // If the panel is already on the page, kill it before re-running.
