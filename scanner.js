@@ -1,7 +1,8 @@
 // Readable source: make all edits here.
 // To build: run "npm run minify" which outputs bookmarklet.min.js
-// Then prefix "javascript:" to the contents of bookmarklet.min.js that's your installable bookmarklet.
+// Then prefix "javascript:" to the contents of bookmarklet.min.js — that's your installable bookmarklet.
 // Requires terser: npm install
+
 (function () {
 
   // If the panel is already on the page, kill it before re-running.
@@ -18,14 +19,13 @@
   // The actual logic for inspecting a single CSS rule.
   // We call this for every rule we find across all stylesheets.
   //
-  // "isProtected" means we're currently inside a prefers-reduced-motion
-  // media query block. If true, we leave the rule alone — the developer
-  // did the right thing.
+  // "isProtected" currently inside a prefers-reduced-motion
+  // media query block. 
   function checkRule(rule, isProtected) {
 
-    // Skip anything that isn't a regular style rule (e.g. @font-face,
-    // @keyframes). Those don't have a .style property to read from.
-    if (rule.type !== CSSRule.STYLE_RULE) return;
+    // instanceof checks what the object actually is — safer and more
+    // readable than comparing against a numeric type constant, which is deprecated.
+    if (!(rule instanceof CSSStyleRule)) return;
 
     const style    = rule.style;
     const selector = rule.selectorText;
@@ -55,10 +55,9 @@
     try {
       Array.from(sheet.cssRules || []).forEach(rule => {
 
-        // type 4 is a @media block. We need to look inside it to check
-        // whether it's a prefers-reduced-motion guard, and then check
-        // the rules nested inside it.
-        if (rule.type === CSSRule.MEDIA_RULE) {
+        // instanceof CSSMediaRule checks for @media blocks — more explicit
+        // and future-proof than the deprecated rule.type === 4 numeric check.
+        if (rule instanceof CSSMediaRule) {
           const mediaText = rule.conditionText || rule.media.mediaText;
           const isSafe    = mediaText.includes('prefers-reduced-motion');
 
@@ -76,15 +75,16 @@
       });
 
     } catch (e) {
-      // Cross-origin sheet, nothing we can do.
+      // Cross-origin sheet
+      console.warn("Could not read stylesheet rules:", e);
     }
   });
 
 
-  // GIFs are a separate issue as they're not CSS at all.
+  // GIFs are a separate issue as they're not CSS.
   // We just grab every img tag whose src contains ".gif".
-  // We can't tell programmatically if a GIF is actually animated,
-  // but flagging all of them is a reasonable call since animated
+  // We can't tell programmatically now if a GIF is actually animated,
+  // but flagging all of them is a reasonable since animated
   // GIFs are extremely common and always worth a second look.
   Array.from(document.querySelectorAll('img'))
     .filter(img => img.src && img.src.toLowerCase().includes('.gif'))
@@ -139,6 +139,8 @@
     return str.length > max ? str.slice(0, max) + '...' : str;
   }
 
+
+
   panel.innerHTML = `
     <div style="padding:14px 16px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;align-items:center;">
       <div>
@@ -180,7 +182,7 @@
           `).join('')
       }
       ${total > 20
-        ? `<div style="color:#64748b;font-size:11px;text-align:center;">...and ${total - 20} more</div>`
+        ? `<div style="color:#94a3b8;font-size:11px;text-align:center;">...and ${total - 20} more</div>`
         : ''
       }
     </div>
@@ -189,7 +191,7 @@
       <button id="a11y-toggle-btn" style="width:100%;padding:8px;background:#7c3aed;color:#ede9fe;border:none;border-radius:6px;font-family:'Courier New',monospace;font-size:12px;cursor:pointer;margin-bottom:8px;">
         Suppress All Animations
       </button>
-      <div style="font-size:10px;color:#475569;">
+      <div style="font-size:10px;color:#94a3b8;">
         Scanned ${document.styleSheets.length} stylesheet(s) · ${document.querySelectorAll('*').length} elements
       </div>
     </div>
@@ -233,18 +235,18 @@
       document.head.appendChild(styleTag);
 
       suppressed = true;
-      btn.textContent       = 'Re-enable Animations';
-      btn.style.background  = '#166534';
-      btn.style.color       = '#86efac';
+      btn.textContent      = 'Re-enable Animations';
+      btn.style.background = '#166534';
+      btn.style.color      = '#86efac';
 
     } else {
       const styleTag = document.getElementById(KILL_SWITCH_ID);
       if (styleTag) styleTag.remove();
 
       suppressed = false;
-      btn.textContent       = 'Suppress All Animations';
-      btn.style.background  = '#7c3aed';
-      btn.style.color       = '#ede9fe';
+      btn.textContent      = 'Suppress All Animations';
+      btn.style.background = '#7c3aed';
+      btn.style.color      = '#ede9fe';
     }
   });
 
